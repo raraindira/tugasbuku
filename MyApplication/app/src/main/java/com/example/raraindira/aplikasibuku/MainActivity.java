@@ -21,13 +21,13 @@ import java.util.*;
 public class MainActivity extends ActionBarActivity {
     Button btnSimpan;
     ListView listViewBook;
-    EditText judulBuku, namaPengarang, jumlahHalaman;
+    EditText judulBuku,namaPengarang, jumlahHalaman;
 
     //menginisiasi arraylist yang akan digunakan untuk menyimpan daftar judul buku
-    ArrayList<String> listOfBook=new ArrayList<>();
+    ArrayList<Book> listOfBook=new ArrayList<>();
 
     //mendeklarasikan arrayadapter
-    ArrayAdapter<String> adapter;
+    CustomArrayAdapter customArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +40,9 @@ public class MainActivity extends ActionBarActivity {
         jumlahHalaman= (EditText) findViewById(R.id.jumlahHalaman);
         btnSimpan= (Button) findViewById(R.id.btn_simpan);
 
-        //menyiapkan data
-        listOfBook.add("Laskar Pelangi");
-        listOfBook.add("5 cm");
-        listOfBook.add("Ayat ayat cinta");
-        listOfBook.add("Lima Menara");
-        listOfBook.add("Tutorial Pemrograman Android");
-
         //meng-inisiasi arrayadapter
-        adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listOfBook);
-        listViewBook.setAdapter(adapter);
+        customArrayAdapter = new CustomArrayAdapter(this, listOfBook);
+        listViewBook.setAdapter(customArrayAdapter);
 
         //mengaktifkan fungsi onItemClickListener dan onItemLongClickListener
         listViewBook.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,13 +70,16 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 //something happen if user click this button
-                String title=judulBuku.getText().toString();
+                String title = judulBuku.getText().toString();
+                String pengarang = namaPengarang.getText().toString();
+                String halaman = jumlahHalaman.getText().toString();
                 // dilakukan check untuk memastikan bahwa user telah menulis judul buku
                 if(!title.isEmpty()){
                     // menambahkan judul buku kedalam listOfBook
-                    listOfBook.add(title);
+                    listOfBook.add(new Book(title, pengarang, halaman));
                     // meng-update listview
-                    adapter.notifyDataSetChanged();
+//                    listViewBook.setAdapter(customArrayAdapter);
+                    customArrayAdapter.notifyDataSetChanged();
                     // clear edittext
                     judulBuku.setText("");
                 }else{
@@ -127,7 +123,7 @@ public class MainActivity extends ActionBarActivity {
                 dialog.dismiss();
                 listOfBook.remove(bookTitle);
                 // setelah menghapus, kita perlu meng-update listview
-                adapter.notifyDataSetChanged();
+                customArrayAdapter.notifyDataSetChanged();
             }
         });
         deleteDialog.setNegativeButton("Tidak",new DialogInterface.OnClickListener() {
