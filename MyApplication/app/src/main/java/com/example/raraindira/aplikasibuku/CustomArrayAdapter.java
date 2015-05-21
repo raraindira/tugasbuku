@@ -21,13 +21,13 @@ import java.util.*;
 public class MainActivity extends ActionBarActivity {
     Button btnSimpan;
     ListView listViewBook;
-    EditText judulBuku, namaPengarang, jumlahHalaman;
+    EditText editTextJudul,editTextPengarang, editTextHalaman;
 
     //menginisiasi arraylist yang akan digunakan untuk menyimpan daftar judul buku
-    ArrayList<String> listOfBook=new ArrayList<>();
+    ArrayList<Book> listOfBook=new ArrayList<>();
 
     //mendeklarasikan arrayadapter
-    ArrayAdapter<String> adapter;
+    CustomArrayAdapter customArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,21 +35,14 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         listViewBook= (ListView) findViewById(R.id.listView_output);
-        judulBuku= (EditText) findViewById(R.id.judulBuku);
-        namaPengarang= (EditText) findViewById(R.id.namaPengarang);
-        jumlahHalaman= (EditText) findViewById(R.id.jumlahHalaman);
+        editTextJudul= (EditText) findViewById(R.id.editText_judul);
+        editTextPengarang= (EditText) findViewById(R.id.editText_pengarang);
+        editTextHalaman= (EditText) findViewById(R.id.editText_halaman);
         btnSimpan= (Button) findViewById(R.id.btn_simpan);
 
-        //menyiapkan data
-        listOfBook.add("Laskar Pelangi");
-        listOfBook.add("5 cm");
-        listOfBook.add("Ayat ayat cinta");
-        listOfBook.add("Lima Menara");
-        listOfBook.add("Tutorial Pemrograman Android");
-
         //meng-inisiasi arrayadapter
-        adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listOfBook);
-        listViewBook.setAdapter(adapter);
+        customArrayAdapter = new CustomArrayAdapter(this, listOfBook);
+        listViewBook.setAdapter(customArrayAdapter);
 
         //mengaktifkan fungsi onItemClickListener dan onItemLongClickListener
         listViewBook.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,15 +70,18 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 //something happen if user click this button
-                String title=judulBuku.getText().toString();
+                String title = editTextJudul.getText().toString();
+                String pengarang = editTextPengarang.getText().toString();
+                String halaman = editTextHalaman.getText().toString();
                 // dilakukan check untuk memastikan bahwa user telah menulis judul buku
                 if(!title.isEmpty()){
                     // menambahkan judul buku kedalam listOfBook
-                    listOfBook.add(title);
+                    listOfBook.add(new Book(title, pengarang, halaman));
                     // meng-update listview
-                    adapter.notifyDataSetChanged();
+//                    listViewBook.setAdapter(customArrayAdapter);
+                    customArrayAdapter.notifyDataSetChanged();
                     // clear edittext
-                    judulBuku.setText("");
+                    editTextJudul.setText("");
                 }else{
                     Toast.makeText(getApplicationContext(),"judul buku waji diisi",Toast.LENGTH_SHORT).show();
                 }
@@ -127,7 +123,7 @@ public class MainActivity extends ActionBarActivity {
                 dialog.dismiss();
                 listOfBook.remove(bookTitle);
                 // setelah menghapus, kita perlu meng-update listview
-                adapter.notifyDataSetChanged();
+                customArrayAdapter.notifyDataSetChanged();
             }
         });
         deleteDialog.setNegativeButton("Tidak",new DialogInterface.OnClickListener() {

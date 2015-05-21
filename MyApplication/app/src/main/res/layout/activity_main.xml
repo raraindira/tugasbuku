@@ -12,19 +12,32 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText_input"
-        android:layout_gravity="center_horizontal"/>
+        android:id="@+id/judulBuku"
+        android:layout_gravity="center_horizontal"
+        android:text="Masukkan judul buku" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/namaPengarang"
+        android:layout_gravity="center_horizontal"
+        android:text="Masukkan nama pengarang" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/jumlahHalaman"
+        android:layout_gravity="center_horizontal"
+        android:text="Masukkan jumlah halaman" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="simpan"
-        android:id="@+id/btn_simpan"
-        android:layout_gravity="center_horizontal"/>
+        android:id="@+id/btn_simpan" />
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView_output"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_height="242dp"
+        android:id="@+id/listView_output" />
 </LinearLayout>
